@@ -1,24 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route } from 'react-router';
+import { useParams } from 'react-router-dom';
+import './App.scss';
+import WeatherList from './components/WeatherList/WeatherList';
+import WeatherItem from './components/WeatherItem/WeatherItem';
 
 function App() {
+  const { city } = useParams();
+  const rootClassName: string = city ? 'weather-app weather-by-city' : 'weather-app';
+console.log(city);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={rootClassName}>
+      <div className="weather-app__left">
+        <Route path="/" component={WeatherList} />
+      </div>
+      <div className="weather-app__right">
+        <Route path="/:city" component={WeatherItem} />
+      </div>
     </div>
   );
 }
