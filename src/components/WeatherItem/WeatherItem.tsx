@@ -46,7 +46,7 @@ export default function WeatherItem() {
   useEffect(() => {
     const weatherByCity: WeatherByCity = state.list.find(
       (next: WeatherByCity) => next.city === city
-    );
+    )!;
 
     if (!weatherByCity || !isWeatherDataActual(weatherByCity)) {
       getCurrentWeatherByCityEffect(dispatch, city);
@@ -59,7 +59,7 @@ export default function WeatherItem() {
 
   const weatherByCity: WeatherByCity = state.list.find(
     (next: WeatherByCity) => next.city === city
-  );
+  )!;
 
   let error = '';
 

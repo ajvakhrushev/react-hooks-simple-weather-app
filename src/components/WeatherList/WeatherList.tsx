@@ -25,7 +25,7 @@ export default function WeatherList() {
   const classes = useStyles();
   const [state, dispatch] = useReducer(citiesReducer, []);
   const [citySearch, setCitySearch] = useState('');
-  const [cities, setCities] = useState([]);
+  const [cities, setCities] = useState([] as string[]);
 
   useEffect(() => getCitiesEffect(dispatch), []);
   useEffect(() => {
@@ -43,8 +43,8 @@ export default function WeatherList() {
         label="Search the City"
         margin="normal"
         variant="outlined"
-        onInput={(event) => setCitySearch(event.target.value)}
-        onChange={(event) => setCitySearch(event.target.value)}
+        onInput={(event) => setCitySearch((event.target as HTMLInputElement).value)}
+        onChange={(event) => setCitySearch((event.target as HTMLInputElement).value)}
       />
       <Typography color="textSecondary" gutterBottom hidden={cities.length < 10}>
         There are {cities.length} results found, but you can see only 10.
