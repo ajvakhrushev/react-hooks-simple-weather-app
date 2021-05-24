@@ -20,7 +20,7 @@ const replaceWeatherByCity = (
   return nextList;
 }
 
-export default function citiesReducer(state: WeatherByCityState, action) {
+export default function weatherReducer(state: WeatherByCityState, action) {
     switch (action.type) {
       case 'GET_WEATHER_BY_CITY':
         state.error = '';

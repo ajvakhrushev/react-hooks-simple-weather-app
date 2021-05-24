@@ -8,7 +8,7 @@ export const getCurrentWeatherByCity = (city: string): Promise<AxiosResponse<Wea
   );
 }
 
-export const getCurrentWeatherByCityEffect = (dispatch, city: string) => {
+export const getCurrentWeatherByCityEffect = (dispatch, city: string): void => {
   dispatch({type: 'GET_WEATHER_BY_CITY'});
   
   getCurrentWeatherByCity(city).then(
@@ -18,8 +18,6 @@ export const getCurrentWeatherByCityEffect = (dispatch, city: string) => {
           type: 'GET_WEATHER_BY_CITY_SUCCESS',
           payload: {city, weather: response.data.current}
         });
-
-
       } else {
         dispatch({type: 'GET_WEATHER_BY_CITY_ERROR', payload: 'Error has been occurred'});
       }

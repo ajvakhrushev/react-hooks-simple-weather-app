@@ -53,6 +53,10 @@ export default function WeatherItem() {
     }
   }, [state.list, city]);
 
+  useEffect(() => {
+    window.localStorage.setItem('weatherByCity', JSON.stringify(state.list));
+  }, [state.list]);
+
   const weatherByCity: WeatherByCity = state.list.find(
     (next: WeatherByCity) => next.city === city
   );
@@ -90,7 +94,7 @@ export default function WeatherItem() {
     );
   }
 
-  const { weather } = weatherByCity;
+  const { weather, datetime } = weatherByCity;
 
   return (
     <div className={classes.root}>
@@ -119,7 +123,10 @@ export default function WeatherItem() {
             {city}
           </Typography>
           <Typography color="textSecondary" gutterBottom>
-            Last updated: {weather.last_updated}
+            Last updated on server: {weather.last_updated}
+          </Typography>
+          <Typography color="textSecondary" gutterBottom>
+            Last requested: {new Date(datetime).toLocaleString()}
           </Typography>
           <Typography variant="body1" component="p" gutterBottom>
             Temperature: {weather.temp_c} °C | {weather.temp_f} °F
