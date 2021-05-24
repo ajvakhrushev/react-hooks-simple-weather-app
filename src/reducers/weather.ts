@@ -1,5 +1,6 @@
 import Weather from "../interfaces/Weather";
 import WeatherByCity from "../interfaces/WeatherByCity";
+import WeatherByCityState from "../interfaces/WeatherByCityState";
 
 const replaceWeatherByCity = (
   list: WeatherByCity[] = [],
@@ -19,14 +20,24 @@ const replaceWeatherByCity = (
   return nextList;
 }
 
-export default function citiesReducer(state: WeatherByCity[] = [], action) {
+export default function citiesReducer(state: WeatherByCityState, action) {
     switch (action.type) {
       case 'GET_WEATHER_BY_CITY':
+        state.error = '';
+
         return state;
       case 'GET_WEATHER_BY_CITY_SUCCESS':
         const { city, weather } = action.payload;
 
-        return replaceWeatherByCity(state, city, weather);
+        return {
+          ...state,
+          list: replaceWeatherByCity(state.list, city, weather)
+        };
+      case 'GET_WEATHER_BY_CITY_ERROR':
+        return {
+          ...state,
+          error: action.payload
+        };
       default:
         return state;
     }

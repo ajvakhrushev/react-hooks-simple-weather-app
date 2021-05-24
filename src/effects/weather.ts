@@ -21,13 +21,27 @@ export const getCurrentWeatherByCityEffect = (dispatch, city: string) => {
 
 
       } else {
-        dispatch({type: 'GET_WEATHER_BY_CITY_ERROR', payload: 'error'});
+        dispatch({type: 'GET_WEATHER_BY_CITY_ERROR', payload: 'Error has been occurred'});
       }
     },
     (error: AxiosError): void => {
+      let message: string[] = [];
+
+      if (error?.response?.status) {
+        message.push(error.response.status.toString());
+      }
+
+      if (error?.response?.statusText) {
+        message.push(error.response.statusText);
+      }
+
+      if (error?.message) {
+        message.push(error.message);
+      }
+
       dispatch({
         type: 'GET_WEATHER_BY_CITY_ERROR',
-        payload: `${error.code} - ${error.message}`
+        payload: message.join(' - ')
       })
     }
   );

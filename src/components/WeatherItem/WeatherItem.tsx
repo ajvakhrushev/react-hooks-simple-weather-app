@@ -14,6 +14,7 @@ import { isWeatherDataActual } from '../../models/weather';
 import { getCurrentWeatherByCityEffect } from '../../effects/weather';
 import weatherReducer from '../../reducers/weather';
 import WeatherByCity from '../../interfaces/WeatherByCity';
+import WeatherByCityState from '../../interfaces/WeatherByCityState';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,31 +35,59 @@ export default function WeatherItem() {
   const classes = useStyles();
 
   const weatherByCityRaw: string | null = window.localStorage.getItem('weatherByCity');
-  let initialState: WeatherByCity[] = [];
-
-  if (weatherByCityRaw) {
-    initialState = JSON.parse(weatherByCityRaw);
-  }
+  const initialState: WeatherByCityState = {
+    error: '',
+    list: weatherByCityRaw ? JSON.parse(weatherByCityRaw) : []
+  };
 
   const [state, dispatch] = useReducer(weatherReducer, initialState);
   const { city } = useParams();
 
   useEffect(() => {
-    const weatherByCity: WeatherByCity = state.find(
+    const weatherByCity: WeatherByCity = state.list.find(
       (next: WeatherByCity) => next.city === city
     );
 
     if (!weatherByCity || !isWeatherDataActual(weatherByCity)) {
       getCurrentWeatherByCityEffect(dispatch, city);
     }
-  }, [state, city]);
+  }, [state.list, city]);
 
-  const weatherByCity: WeatherByCity = state.find(
+  const weatherByCity: WeatherByCity = state.list.find(
     (next: WeatherByCity) => next.city === city
   );
 
-  if (!weatherByCity || !weatherByCity.weather) {
-    return (<div>There is no data about your location yet</div>);
+  let error = '';
+
+  if (state.error) {
+    error = state.error;
+  } else if (!weatherByCity || !weatherByCity.weather) {
+    error = 'There is no data about your location yet';
+  }
+
+  if (error) {
+    return (
+      <div className={classes.root}>
+        <IconButton
+          className={classes.arrowBack}
+          aria-label="back"
+          component={Link}
+          to="/"
+        >
+          <ArrowBack />
+        </IconButton>
+        <Card className={classes.root}>
+          <CardContent>
+            <Typography variant="h5" component="h2" gutterBottom>
+              {city}
+            </Typography>
+            <Typography color="textSecondary" gutterBottom>
+              {error}            
+            </Typography>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   const { weather } = weatherByCity;
