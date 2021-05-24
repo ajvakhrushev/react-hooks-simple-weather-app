@@ -29,8 +29,9 @@ export default function WeatherList() {
 
   useEffect(() => getCitiesEffect(dispatch), []);
   useEffect(() => {
+    const searchValue: string = citySearch.toLowerCase();
     const cities: string[] = state.filter(
-      (next: string) => next.includes(citySearch)
+      (next: string) => next.toLowerCase().includes(searchValue)
     );
 
     setCities(cities);
